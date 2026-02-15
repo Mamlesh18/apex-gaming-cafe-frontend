@@ -57,6 +57,12 @@ export default function GamingSession() {
     loadSessions();
   };
 
+  const handleDelete = async (id) => {
+    if (!confirm("Delete this session?")) return;
+    await api.delete(`/gaming-sessions/${id}`);
+    loadSessions();
+  };
+
   const dayTotal = sessions.reduce((sum, s) => sum + (s.total || 0), 0);
 
   return (
@@ -142,7 +148,7 @@ export default function GamingSession() {
           ) : (
             <table>
               <thead>
-                <tr><th>Room</th><th>People</th><th>Duration</th><th>Rate</th><th>Total</th><th>By</th></tr>
+                <tr><th>Room</th><th>People</th><th>Duration</th><th>Rate</th><th>Total</th><th>By</th><th></th></tr>
               </thead>
               <tbody>
                 {sessions.map((s) => (
@@ -153,6 +159,7 @@ export default function GamingSession() {
                     <td>₹{s.price_per_hour}/hr</td>
                     <td><strong>₹{s.total}</strong></td>
                     <td>{s.created_by}</td>
+                    <td><button className="btn-delete" onClick={() => handleDelete(s._id)}>🗑️</button></td>
                   </tr>
                 ))}
               </tbody>

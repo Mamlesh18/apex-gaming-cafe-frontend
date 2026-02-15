@@ -52,6 +52,12 @@ export default function VisitTracker() {
     loadVisits();
   };
 
+  const handleDelete = async (id) => {
+    if (!confirm("Delete this visit?")) return;
+    await api.delete(`/visits/${id}`);
+    loadVisits();
+  };
+
   const getVisitsForDay = (day) => visits.filter((v) => v.day_of_week === day);
 
   const timeToRow = (time) => {
@@ -161,6 +167,23 @@ export default function VisitTracker() {
               </span>
             ))}
           </div>
+
+          {visits.length > 0 && (
+            <>
+              <hr />
+              <h4 style={{ color: "#fff", marginBottom: 8 }}>All Visits This Week</h4>
+              {visits.map((v) => (
+                <div key={v._id} className="visit-item">
+                  <div>
+                    <span className="legend-dot" style={{ backgroundColor: userColors[v.user], display: "inline-block", marginRight: 6 }}></span>
+                    <strong>{v.user}{v.friend_name ? ` (${v.friend_name})` : ""}</strong>
+                    <span style={{ color: "#8b8fa3", marginLeft: 8 }}>{v.day_of_week} {v.start_time} - {v.end_time}</span>
+                  </div>
+                  <button className="btn-delete" onClick={() => handleDelete(v._id)}>🗑️</button>
+                </div>
+              ))}
+            </>
+          )}
         </div>
       </div>
     </div>

@@ -607,6 +607,41 @@ td {
   padding: 2rem;
 }
 
+/* Delete button */
+.btn-delete {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background 0.2s;
+  opacity: 0.6;
+}
+
+.btn-delete:hover {
+  background: #ef444430;
+  opacity: 1;
+}
+
+/* Entry footer with delete */
+.entry-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 6px;
+}
+
+/* Visit list items */
+.visit-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #252839;
+  font-size: 0.85rem;
+}
+
 hr {
   border: none;
   border-top: 1px solid #2d3148;
@@ -622,6 +657,16 @@ hr {
   stroke: #2d3148 !important;
 }
 
+/* Mobile header - hidden on desktop */
+.mobile-header {
+  display: none;
+}
+
+/* Bottom nav - hidden on desktop */
+.bottom-nav {
+  display: none;
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
   .two-col, .chart-row {
@@ -633,18 +678,214 @@ hr {
 }
 
 @media (max-width: 768px) {
+  /* Hide desktop sidebar */
   .sidebar {
-    width: 60px;
-    padding: 1rem 0.5rem;
+    display: none;
   }
-  .sidebar-header h2, .nav-links a {
-    font-size: 0;
+
+  /* Show mobile header */
+  .mobile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background: #1c1f2e;
+    border-bottom: 1px solid #2d3148;
+    padding: 0 16px;
+    z-index: 100;
   }
+
+  .mobile-header h2 {
+    font-size: 1rem;
+    color: #fff;
+  }
+
+  .mobile-header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .logout-btn-sm {
+    background: transparent;
+    border: 1px solid #ef4444;
+    color: #ef4444;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    cursor: pointer;
+  }
+
+  /* Show bottom nav */
+  .bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: #1c1f2e;
+    border-top: 1px solid #2d3148;
+    z-index: 100;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 4px;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .bottom-nav a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    text-decoration: none;
+    color: #8b8fa3;
+    font-size: 0.65rem;
+    padding: 6px 4px;
+    border-radius: 8px;
+    transition: all 0.2s;
+    min-width: 56px;
+  }
+
+  .bottom-nav a.active {
+    color: #6366f1;
+    background: #6366f115;
+  }
+
+  .nav-icon {
+    font-size: 1.2rem;
+    line-height: 1;
+  }
+
+  .nav-label {
+    font-weight: 500;
+  }
+
+  /* Adjust main content for mobile header + bottom nav */
   .main-content {
-    margin-left: 60px;
-    padding: 1rem;
+    margin-left: 0;
+    padding: 16px;
+    padding-top: 72px;
+    padding-bottom: 80px;
+    min-height: 100vh;
   }
+
+  /* Page header stacks on mobile */
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .page-header h2 {
+    font-size: 1.2rem;
+  }
+
+  /* Summary cards 2-col on mobile */
   .summary-cards {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .summary-card {
+    padding: 0.8rem;
+  }
+
+  .card-value {
+    font-size: 1.1rem;
+  }
+
+  /* Tables scroll horizontally */
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  /* Inline forms stack */
+  .inline-form {
+    flex-direction: column;
+  }
+
+  .inline-form input {
+    width: 100% !important;
+  }
+
+  /* Food summary single col on small screens */
+  .food-summary {
+    grid-template-columns: 1fr;
+  }
+
+  /* Price display smaller */
+  .price-display {
+    font-size: 0.95rem;
+  }
+
+  /* Room/duration selectors wrap nicely */
+  .room-selector button, .duration-selector button {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+
+  /* Cards less padding */
+  .card {
+    padding: 1rem;
+  }
+
+  /* Food entry details stack */
+  .food-entry-details {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  /* Login card responsive */
+  .login-card {
+    width: calc(100vw - 32px);
+    max-width: 380px;
+    padding: 2rem;
+  }
+
+  /* Tabs smaller */
+  .tab {
+    padding: 6px 14px;
+    font-size: 0.8rem;
+  }
+
+  /* Schedule grid scroll */
+  .schedule-grid {
+    overflow-x: auto;
+    min-width: 500px;
+  }
+
+  .schedule-card {
+    overflow-x: auto;
+  }
+
+  /* Chart boxes */
+  .chart-box {
+    padding: 1rem;
+  }
+
+  /* Date input full width */
+  input[type="date"] {
+    width: 100%;
+  }
+}
+
+@media (max-width: 380px) {
+  .summary-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .bottom-nav a {
+    min-width: 48px;
+    font-size: 0.6rem;
+  }
+
+  .nav-icon {
+    font-size: 1rem;
   }
 }

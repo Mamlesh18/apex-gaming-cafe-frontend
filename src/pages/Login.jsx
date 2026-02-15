@@ -13,6 +13,7 @@ export default function Login({ onLogin }) {
       const { data } = await api.post("/login", { username, password });
       localStorage.setItem("token", data.token);
       localStorage.setItem("username", data.username);
+      localStorage.setItem("role", data.role);
       onLogin(data.username);
     } catch {
       setError("Invalid credentials");

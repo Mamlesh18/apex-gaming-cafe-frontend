@@ -48,6 +48,12 @@ export default function FoodCafe() {
     loadEntries();
   };
 
+  const handleDelete = async (id) => {
+    if (!confirm("Delete this food entry?")) return;
+    await api.delete(`/food-entries/${id}`);
+    loadEntries();
+  };
+
   const dayTotal = entries.reduce((sum, e) => sum + (e.total_revenue || 0), 0);
   const dayCost = entries.reduce((sum, e) => sum + (e.vendor_cost || 0), 0);
   const dayProfit = dayTotal - dayCost;
@@ -127,7 +133,10 @@ export default function FoodCafe() {
                   <span>Cost: ₹{e.vendor_cost}</span>
                   <span className="profit">Profit: ₹{e.profit}</span>
                 </div>
-                <small>by {e.created_by}</small>
+                <div className="entry-footer">
+                  <small>by {e.created_by}</small>
+                  <button className="btn-delete" onClick={() => handleDelete(e._id)}>🗑️</button>
+                </div>
               </div>
             ))
           )}
