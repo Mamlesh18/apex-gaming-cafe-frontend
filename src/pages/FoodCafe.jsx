@@ -40,6 +40,7 @@ export default function FoodCafe() {
       date,
       items,
       vendor_cost: Number(vendorCost) || 0,
+      total_revenue: totalRevenue,
       notes,
     });
     setItems([]);
