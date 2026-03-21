@@ -70,6 +70,7 @@ export default function Dashboard() {
   const [range,   setRange]   = useState(null);
   const [loading, setLoading] = useState(false);
   const [error,   setError]   = useState("");
+  const [downloadingPdf, setDownloadingPdf] = useState(false);
 
   /* compute start/end for current tab */
   const getRange = useCallback(() => {
@@ -109,6 +110,38 @@ export default function Dashboard() {
 
   /* for Custom tab, only load when button clicked */
   const handleCustomLoad = () => load();
+
+  const handleDownloadPDF = async () => {
+    let start, end;
+    if (tab === "Daily") {
+      start = selectedDate;
+      end = selectedDate;
+    } else {
+      const r = getRange();
+      if (!r) return;
+      start = r.start;
+      end = r.end;
+    }
+
+    setDownloadingPdf(true);
+    try {
+      const response = await api.get(`/analytics/report/pdf?start_date=${start}&end_date=${end}`, {
+        responseType: "blob",
+      });
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `business_report_${start}_${end}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (e) {
+      setError("Failed to download PDF report. Make sure you are connected.");
+      console.error(e);
+    } finally {
+      setDownloadingPdf(false);
+    }
+  };
 
   /* ─── Daily pie ─── */
   const renderDailyPie = () => {
@@ -273,8 +306,15 @@ export default function Dashboard() {
   return (
     <div className="page">
       {/* Header */}
-      <div className="page-header">
+      <div className="page-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <h2>Dashboard</h2>
+        <button 
+          className="db-pdf-btn" 
+          onClick={handleDownloadPDF} 
+          disabled={downloadingPdf || loading}
+        >
+          {downloadingPdf ? "GENERATING..." : "📄 DOWNLOAD PDF"}
+        </button>
       </div>
 
       {/* Tabs */}
@@ -419,6 +459,28 @@ export default function Dashboard() {
           opacity: 0.6;
           cursor: not-allowed;
           animation: none;
+        }
+        .db-pdf-btn {
+          font-family: 'Orbitron', sans-serif;
+          font-size: 0.78rem;
+          font-weight: 700;
+          letter-spacing: 0.12em;
+          background: linear-gradient(135deg, #a855f7, #6b21a8);
+          color: #fff;
+          border: none;
+          padding: 10px 24px;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
+        }
+        .db-pdf-btn:hover:not(:disabled) {
+          box-shadow: 0 0 24px rgba(168, 85, 247, 0.6);
+          transform: translateY(-2px);
+        }
+        .db-pdf-btn:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
         }
         @media (max-width: 600px) {
           .db-custom-range { flex-direction: column; align-items: stretch; }
